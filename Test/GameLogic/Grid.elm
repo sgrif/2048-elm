@@ -4,7 +4,7 @@ import ElmTest.Test (..)
 import ElmTest.Assertion (..)
 
 import GameLogic.Grid (..)
-import GameLogic (Direction (..))
+import GameModel (..)
 
 tests = suite "GameLogic.Grid"
         [ moveTest

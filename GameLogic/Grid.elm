@@ -1,12 +1,10 @@
-module GameLogic.Grid (Grid (..), move) where
+module GameLogic.Grid (move) where
 
 import List (map, reverse)
 
-import GameLogic (Direction (..))
+import GameModel (..)
 import GameLogic.Row as Row
 import Utils.List (transpose)
-
-type Grid = Grid (List (List (Maybe Int)))
 
 move : Direction -> Grid -> Grid
 move dir = rotateFrom dir << shift << rotateTo dir
