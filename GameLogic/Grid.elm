@@ -26,4 +26,11 @@ rotateFrom dir = case dir of
 rotateClockwise : Grid -> Grid
 rotateClockwise (Grid rows) = Grid <| transpose <| map reverse rows
 
-shift (Grid rows) = Grid <| map Row.slide rows
+shift (Grid rows) = Grid <| map shiftRow rows
+
+shiftRow row =
+  let shifted = Row.slide row
+  in
+     if shifted == row
+        then row
+        else shiftRow shifted

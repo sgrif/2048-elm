@@ -15,6 +15,7 @@ moveTest = suite "move"
         , moveRight
         , moveDown
         , moveLeft
+        , movingMultiple
         ]
 
 moveUp = test "moving up"
@@ -67,4 +68,17 @@ moveLeft = test "moving left"
                            , [Just 4, Just 8, Nothing, Nothing]
                            , [Just 2, Just 4, Nothing, Nothing]
                            , [Just 8, Nothing, Nothing, Nothing]
+                           ]))
+
+movingMultiple = test "moving multiple"
+        (assertEqual
+        (Grid [ [Nothing, Nothing, Nothing, Nothing]
+              , [Nothing, Nothing, Nothing, Nothing]
+              , [Just 4, Nothing, Nothing, Nothing]
+              , [Just 8, Nothing, Nothing, Just 2]
+              ])
+        (move Down <| Grid [ [Just 2, Nothing, Nothing, Nothing]
+                           , [Just 2, Nothing, Nothing, Just 2]
+                           , [Just 4, Nothing, Nothing, Nothing]
+                           , [Just 4, Nothing, Nothing, Nothing]
                            ]))

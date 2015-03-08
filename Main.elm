@@ -14,8 +14,8 @@ stepGame {direction} = case direction of
   Nothing -> identity
 
 initialGrid = Grid
-        [ [Nothing, Nothing, Nothing, Nothing]
-        , [Nothing, Just 2, Just 2, Nothing]
-        , [Nothing, Nothing, Nothing, Nothing]
-        , [Nothing, Nothing, Nothing, Nothing]
+        [ [Just 2, Nothing, Nothing, Nothing]
+        , [Just 2, Nothing, Nothing, Just 2]
+        , [Just 4, Nothing, Nothing, Nothing]
+        , [Just 4, Nothing, Nothing, Nothing]
         ]
