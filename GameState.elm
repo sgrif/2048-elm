@@ -4,7 +4,8 @@ module GameState ( GameState
                  , initialState
                  ) where
 
-import Maybe (Maybe (..), withDefault)
+import Maybe (Maybe (..), withDefault, andThen)
+import Maybe
 import Random
 
 import GameLogic.Grid (..)
@@ -30,15 +31,20 @@ initialState {time} =
       emptyState = GameState emptyGrid seed Playing
   in placeRandomTile <| placeRandomTile emptyState
 
-stepGame dir state =
-  let step = moveGrid dir
-               >> placeRandomTile
-               >> checkIfLost
-  in case state.status of
-    Playing -> step state
-    Lost -> state
+stepGame dir originalState =
+  assertPlaying originalState
+    `andThen` moveGrid dir
+    |> Maybe.map placeRandomTile
+    |> Maybe.map checkIfLost
+    |> withDefault originalState
 
-moveGrid dir state = { state | grid <- move dir state.grid }
+assertPlaying state = case state.status of
+  Playing -> Just state
+  Lost -> Nothing
+
+moveGrid dir state =
+  let state' = { state | grid <- move dir state.grid }
+  in if state == state' then Nothing else Just state'
 
 placeRandomTile state =
   let (randomTile, seed') = generateRandomTile state.seed

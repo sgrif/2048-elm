@@ -21,6 +21,8 @@ stepGameStateTests = suite "stepGameState"
                 (assertEqual Lost <| .status <| stepGameState (Input (Just Down) 0.0) gameOneMoveFromLosing)
         , test "game is not lost when moves possible but board is full"
                 (assertEqual Playing <| .status <| stepGameState (Input (Just Up) 0.0) gameOneMoveFromLosing)
+        , test "tiles are not generated when invalid move is made"
+                (assertEqual fullTopRow <| stepGameState (Input (Just Up) 0.0) fullTopRow)
         ]
 
 gameOneMoveFromLosing =
@@ -37,4 +39,14 @@ lostGameState =
   { seed = Random.initialSeed 0
   , status = Lost
   , grid = emptyGrid
+  }
+
+fullTopRow =
+  { seed = Random.initialSeed 0
+  , status = Playing
+  , grid = Grid [ [Just 2, Just 4, Just 8, Just 4]
+                , [Nothing, Nothing, Nothing, Nothing]
+                , [Nothing, Nothing, Nothing, Nothing]
+                , [Nothing, Nothing, Nothing, Nothing]
+                ]
   }
