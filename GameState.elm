@@ -1,4 +1,7 @@
-module GameState where
+module GameState ( GameState
+                 , stepGameState
+                 , initialState
+                 ) where
 
 import Maybe (Maybe (..), withDefault)
 import Random
@@ -20,23 +23,19 @@ stepGameState {direction} = case direction of
 
 initialState : Input -> GameState
 initialState {time} =
-  let seed = seedFromTime time
+  let seed = Random.initialSeed <| round time
       emptyState = GameState emptyGrid seed
   in placeRandomTile <| placeRandomTile emptyState
 
-stepGame : Direction -> GameState -> GameState
 stepGame dir state =
-  let state' = { state | grid <- move dir state.grid }
-  in placeRandomTile state'
+  placeRandomTile { state | grid <- move dir state.grid }
 
-seedFromTime = round >> Random.initialSeed
-
-placeRandomTile : GameState -> GameState
 placeRandomTile {grid,seed} =
   let (randomTile, seed') = generateRandomTile seed
       (maybeCoords, seed'') = sample seed' <| emptyTiles grid
       coords = withDefault (0, 0) maybeCoords
-  in GameState (setTile randomTile coords grid) seed''
+      grid' = setTile randomTile coords grid
+  in GameState grid' seed''
 
 generateRandomTile seed =
   let (flt, seed') = Random.generate (Random.float 0 1) seed
