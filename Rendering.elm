@@ -7,16 +7,24 @@ import List (..)
 import Text (..)
 
 import GameModel (..)
+import GameState (GameState, GameStatus (..))
 
-renderGrid : Grid -> Element
-renderGrid grid =
+renderGrid : GameState -> Element
+renderGrid {grid, status} =
   let tiles = tilesWithCoords grid |> map renderTileAtCoords
+      gameOverOverlay = case status of
+        Playing -> []
+        Lost -> gameOver
   in
-     collage (round gridWidth) (round gridWidth) ([gridBox] ++ tiles)
+     collage (round gridWidth) (round gridWidth) ([gridBox] ++ tiles ++ gameOverOverlay)
 
 gridBox = filled gridBackground <| square gridWidth
 
 gridBackground = rgb 187 173 160
+
+gameOver = [filled gameOverBackground <| square gridWidth, toForm <| plainText "Game Over"]
+
+gameOverBackground = rgba 255 255 255 0.4
 
 gridWidth = 4.0 * tileSize + 5.0 * tileMargin
 
