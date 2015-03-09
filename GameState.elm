@@ -10,37 +10,33 @@ import Utils.List (sample)
 
 type alias GameState = {
   grid: Grid,
-  seed: Maybe Random.Seed
+  seed: Random.Seed
 }
 
 stepGameState : Input -> GameState -> GameState
-stepGameState {direction, time} = case direction of
-  Just dir -> stepGame dir time
+stepGameState {direction} = case direction of
+  Just dir -> stepGame dir
   Nothing -> identity
 
-initialState = GameState initialGrid Nothing
+initialState : Input -> GameState
+initialState {time} =
+  let seed = seedFromTime time
+      emptyState = GameState emptyGrid seed
+  in placeRandomTile <| placeRandomTile emptyState
 
-initialGrid = Grid
-        [ [Just 2, Nothing, Nothing, Nothing]
-        , [Just 2, Nothing, Nothing, Just 2]
-        , [Just 4, Nothing, Nothing, Nothing]
-        , [Just 4, Nothing, Nothing, Nothing]
-        ]
-
-stepGame : Direction -> Float -> GameState -> GameState
-stepGame dir time {grid, seed} =
-  let seed' = withDefault (seedFromTime time) seed
-      grid' = move dir grid
-      (grid'', seed'') = placeRandomTile grid' seed'
-  in GameState grid'' <| Just seed''
+stepGame : Direction -> GameState -> GameState
+stepGame dir state =
+  let state' = { state | grid <- move dir state.grid }
+  in placeRandomTile state'
 
 seedFromTime = round >> Random.initialSeed
 
-placeRandomTile grid seed =
+placeRandomTile : GameState -> GameState
+placeRandomTile {grid,seed} =
   let (randomTile, seed') = generateRandomTile seed
       (maybeCoords, seed'') = sample seed' <| emptyTiles grid
       coords = withDefault (0, 0) maybeCoords
-  in (setTile randomTile coords grid, seed'')
+  in GameState (setTile randomTile coords grid) seed''
 
 generateRandomTile seed =
   let (flt, seed') = Random.generate (Random.float 0 1) seed

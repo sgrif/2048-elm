@@ -3,6 +3,7 @@ module GameModel ( Direction (..)
                  , Tile
                  , Coords
                  , tilesWithCoords
+                 , emptyGrid
                  , emptyTiles
                  ) where
 
@@ -20,6 +21,9 @@ tilesWithCoords (Grid rows) =
 rowWithCoords y row = indexedMap (tileWithCoords y) row
 
 tileWithCoords y x tile = (tile, (x, y))
+
+emptyGrid : Grid
+emptyGrid = Grid <| repeat 4 <| repeat 4 Nothing
 
 emptyTiles : Grid -> List Coords
 emptyTiles =
