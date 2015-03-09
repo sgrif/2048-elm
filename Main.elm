@@ -1,21 +1,10 @@
-import GameLogic.Grid (..)
-import GameModel (..)
-import Input (..)
-import Rendering (..)
 import Signal (..)
 
-main = renderGrid <~ gameState
+import GameModel (..)
+import GameState (..)
+import Input (..)
+import Rendering (..)
 
-gameState = foldp stepGame initialGrid input
+main = renderGrid <~ grid
 
-stepGame : Input -> Grid -> Grid
-stepGame {direction} = case direction of
-  Just d -> move d >> placeNewTile
-  Nothing -> identity
-
-initialGrid = Grid
-        [ [Just 2, Nothing, Nothing, Nothing]
-        , [Just 2, Nothing, Nothing, Just 2]
-        , [Just 4, Nothing, Nothing, Nothing]
-        , [Just 4, Nothing, Nothing, Nothing]
-        ]
+grid = .grid <~ foldp stepGameState initialState input

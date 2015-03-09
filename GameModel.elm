@@ -3,9 +3,10 @@ module GameModel ( Direction (..)
                  , Tile
                  , Coords
                  , tilesWithCoords
+                 , emptyTiles
                  ) where
 
-import List (indexedMap, concat)
+import List (..)
 
 type Direction = Up | Left | Right | Down
 type Grid = Grid (List (List (Maybe Int)))
@@ -19,3 +20,11 @@ tilesWithCoords (Grid rows) =
 rowWithCoords y row = indexedMap (tileWithCoords y) row
 
 tileWithCoords y x tile = (tile, (x, y))
+
+emptyTiles : Grid -> List Coords
+emptyTiles =
+  tilesWithCoords >> filter (fst >> isEmptyTile) >> map snd
+
+isEmptyTile t = case t of
+  Just _ -> False
+  Nothing -> True

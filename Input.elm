@@ -2,19 +2,19 @@ module Input (Input, input) where
 
 import Keyboard
 import Maybe (..)
-import Random
 import Signal (..)
+import Time
 
 import GameModel (..)
 
 type alias Input = {
-    direction: Maybe Direction
+  direction: Maybe Direction,
+  time: Float
 }
 
 input : Signal Input
-input = Input <~ playerDirection
+input = (uncurry <| flip Input) <~ Time.timestamp playerDirection
 
-playerDirection : Signal (Maybe Direction)
 playerDirection = toDirection <~ Keyboard.arrows
 
 toDirection dir =

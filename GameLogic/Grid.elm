@@ -1,4 +1,4 @@
-module GameLogic.Grid (move, setTile, placeNewTile) where
+module GameLogic.Grid (move, setTile) where
 
 import Array
 import List (..)
@@ -44,13 +44,3 @@ setTile tile (x, y) (Grid rows) =
       row' = Row.setTile tile x row
       newRows = Array.set y row' rows'
   in Grid <| Array.toList newRows
-
-placeNewTile : Grid -> Grid
-placeNewTile g =
-  let coords = filter (fst >> emptyTile) >> head >> snd <| tilesWithCoords g
-  in setTile (Just 2) coords g
-
-emptyTile : Tile -> Bool
-emptyTile t = case t of
-  Just _ -> False
-  Nothing -> True
