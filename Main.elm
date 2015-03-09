@@ -10,7 +10,7 @@ gameState = foldp stepGame initialGrid input
 
 stepGame : Input -> Grid -> Grid
 stepGame {direction} = case direction of
-  Just d -> move d
+  Just d -> move d >> placeNewTile
   Nothing -> identity
 
 initialGrid = Grid

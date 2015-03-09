@@ -8,6 +8,7 @@ import GameModel (..)
 
 tests = suite "GameLogic.Grid"
         [ moveTest
+        , setTest
         ]
 
 moveTest = suite "move"
@@ -82,3 +83,17 @@ movingMultiple = test "moving multiple"
                            , [Just 4, Nothing, Nothing, Nothing]
                            , [Just 4, Nothing, Nothing, Nothing]
                            ]))
+
+setTest = test "setTile"
+        (assertEqual
+        (Grid [ [Just 2, Nothing, Nothing, Nothing]
+              , [Nothing, Nothing, Nothing, Nothing]
+              , [Just 4, Nothing, Nothing, Nothing]
+              , [Just 8, Nothing, Nothing, Just 2]
+              ])
+        (setTile (Just 2) (0, 0)
+                (Grid [ [Nothing, Nothing, Nothing, Nothing]
+                      , [Nothing, Nothing, Nothing, Nothing]
+                      , [Just 4, Nothing, Nothing, Nothing]
+                      , [Just 8, Nothing, Nothing, Just 2]
+                      ])))

@@ -1,6 +1,8 @@
-module GameLogic.Grid (move) where
+module GameLogic.Grid (move, setTile, placeNewTile) where
 
-import List (map, reverse)
+import Array
+import List (..)
+import Maybe (Maybe (..), withDefault)
 
 import GameModel (..)
 import GameLogic.Row as Row
@@ -34,3 +36,21 @@ shiftRow row =
      if shifted == row
         then row
         else shiftRow shifted
+
+setTile : Tile -> Coords -> Grid -> Grid
+setTile tile (x, y) (Grid rows) =
+  let rows' = Array.fromList rows
+      row = withDefault [] <| Array.get y rows'
+      row' = Row.setTile tile x row
+      newRows = Array.set y row' rows'
+  in Grid <| Array.toList newRows
+
+placeNewTile : Grid -> Grid
+placeNewTile g =
+  let coords = filter (fst >> emptyTile) >> head >> snd <| tilesWithCoords g
+  in setTile (Just 2) coords g
+
+emptyTile : Tile -> Bool
+emptyTile t = case t of
+  Just _ -> False
+  Nothing -> True
