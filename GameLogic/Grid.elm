@@ -1,4 +1,4 @@
-module GameLogic.Grid (move, setTile) where
+module GameLogic.Grid (move, setTile, hasPossibleMoves) where
 
 import Array
 import List (..)
@@ -44,3 +44,10 @@ setTile tile (x, y) (Grid rows) =
       row' = Row.setTile tile x row
       newRows = Array.set y row' rows'
   in Grid <| Array.toList newRows
+
+hasPossibleMoves : Grid -> Bool
+hasPossibleMoves grid =
+  grid /= (move Up grid)
+    || grid /= (move Down grid)
+    || grid /= (move Left grid)
+    || grid /= (move Right grid)
