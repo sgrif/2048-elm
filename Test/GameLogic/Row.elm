@@ -29,4 +29,16 @@ slideTests = suite "slide"
                 (assertEqual
                 [Just 2, Just 8, Just 2, Nothing]
                 (slide [Just 2, Just 4, Just 4, Just 2]))
+        , test "combining multiple"
+                (assertEqual
+                [Just 8, Just 4, Nothing, Nothing]
+                (slide [Just 4, Just 4, Just 2, Just 2]))
+        , test "does not recurisively combine"
+                (assertEqual
+                [Just 4, Just 4, Nothing, Nothing]
+                (slide <| repeat 4 <| Just 2))
+        , test "never combines newly created tiles"
+                (assertEqual
+                [Just 4, Just 4, Nothing, Nothing]
+                (slide [Just 2, Just 2, Just 4, Nothing]))
         ]

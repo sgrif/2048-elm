@@ -22,6 +22,6 @@ nonEmpty a = case a of
 combineMatching xs = case xs of
   Just a :: Just b :: ys ->
     if a == b
-      then Just (a + b) :: ys
+      then Just (a + b) :: combineMatching ys
       else Just a :: (combineMatching <| Just b :: ys)
   _ -> xs
