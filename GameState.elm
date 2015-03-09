@@ -2,7 +2,6 @@ module GameState where
 
 import Maybe (Maybe (..), withDefault)
 import Random
-import Debug
 
 import GameLogic.Grid (..)
 import GameModel (..)
@@ -38,7 +37,7 @@ stepGame dir time {grid, seed} =
 seedFromTime = round >> Random.initialSeed
 
 placeRandomTile grid seed =
-  let (randomTile, seed') = Debug.log "random" (generateRandomTile seed)
+  let (randomTile, seed') = generateRandomTile seed
       (maybeCoords, seed'') = sample seed' <| emptyTiles grid
       coords = withDefault (0, 0) maybeCoords
   in (setTile randomTile coords grid, seed'')

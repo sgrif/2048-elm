@@ -5,6 +5,6 @@ import GameState (..)
 import Input (..)
 import Rendering (..)
 
-main = renderGrid <~ grid
-
-grid = .grid <~ foldp stepGameState initialState input
+main = renderGrid
+        << .grid
+        <~ foldp stepGameState initialState input
